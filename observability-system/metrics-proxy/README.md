@@ -25,33 +25,34 @@ A lightweight, production-ready FastAPI service that exposes a single `/observat
 
 ### Docker
 Build and run the Docker image:
-    ```bash
-    docker build -t metrics-proxy:latest -f Dockerfile .
-    docker run -e PROM_URL="http://127.0.0.1:9090" -p 8000:8000 --rm metrics-proxy:latest
-    ```
+  ```bash
+  docker build -t metrics-proxy:latest -f Dockerfile .
+  docker run -e PROM_URL="http://127.0.0.1:9090" -p 8000:8000 --rm metrics-proxy:latest
+  ```
 Mount a custom `queries.yaml` from the host:
-    ```bash
-    docker run -v /path/to/queries.yaml:/app/src/queries.yaml \
-      -e PROM_URL="http://127.0.0.1:9090" -p 8000:8000 --rm metrics-proxy:latest
-    ```
+  ```bash
+  docker run -v /path/to/queries.yaml:/app/src/queries.yaml \
+    -e PROM_URL="http://127.0.0.1:9090" -p 8000:8000 --rm metrics-proxy:latest
+  ```
 
 ### Kubernetes
 Mount a custom `queries.yaml` using a ConfigMap:
-    ```bash
-    kubectl create configmap metrics-proxy-queries \
-      --from-file=queries.yaml=/path/to/queries.yaml -n <namespace>
-    ```
+  ```bash
+  kubectl create configmap metrics-proxy-queries \
+    --from-file=queries.yaml=/path/to/queries.yaml -n <namespace>
+  ```
+
 Deployment snippet (mounting the ConfigMap):
-    ```yaml
-    volumeMounts:
-      - name: queries
-        mountPath: /app/src/queries.yaml
-        subPath: queries.yaml
-    volumes:
-      - name: queries
-        configMap:
-          name: metrics-proxy-queries
-    ```
+  ```yaml
+  volumeMounts:
+    - name: queries
+      mountPath: /app/src/queries.yaml
+      subPath: queries.yaml
+  volumes:
+    - name: queries
+      configMap:
+        name: metrics-proxy-queries
+  ```
 
 ## API Usage
 
