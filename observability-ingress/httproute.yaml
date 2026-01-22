@@ -1,0 +1,65 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: observability-class-routing
+  namespace: observability-ingress
+spec:
+  parentRefs:
+    - name: observability-gateway
+      namespace: observability-ingress
+      sectionName: otlp-http
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/
+          headers:
+            - name: x-otel-class
+              type: Exact
+              value: gold
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.kgateway.dev
+            kind: TrafficPolicy
+            name: gold-service-limit
+      backendRefs:
+        - name: prio-ingestion-gateway-gold
+          port: 4318
+          namespace: observability
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/
+          headers:
+            - name: x-otel-class
+              type: Exact
+              value: silver
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.kgateway.dev
+            kind: TrafficPolicy
+            name: silver-service-limit
+      backendRefs:
+        - name: prio-ingestion-gateway-silver
+          port: 4318
+          namespace: observability
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /v1/
+          headers:
+            - name: x-otel-class
+              type: Exact
+              value: bronze
+      filters:
+        - type: ExtensionRef
+          extensionRef:
+            group: gateway.kgateway.dev
+            kind: TrafficPolicy
+            name: bronze-service-limit
+      backendRefs:
+        - name: prio-ingestion-gateway-bronze
+          port: 4318
+          namespace: observability

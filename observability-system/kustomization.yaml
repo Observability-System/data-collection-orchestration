@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: observability-system
+commonLabels:
+  app.kubernetes.io/part-of: observability
+  app.kubernetes.io/component: system
+  observability.myorg.io/purpose: metrics
+resources:
+  - metrics-proxy/service.yaml
+  - prometheus/deployment.yaml
+  - prometheus/rbac.yaml
+configMapGenerator:
+  - name: metrics-proxy-queries
+    files:
+      - metrics-proxy/src/queries.yaml

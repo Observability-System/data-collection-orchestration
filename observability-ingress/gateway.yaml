@@ -1,0 +1,14 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: observability-gateway
+  namespace: observability-ingress
+spec:
+  gatewayClassName: kgateway
+  listeners:
+  - name: otlp-http
+    port: 4318
+    protocol: HTTP
+    allowedRoutes:
+      namespaces:
+        from: All

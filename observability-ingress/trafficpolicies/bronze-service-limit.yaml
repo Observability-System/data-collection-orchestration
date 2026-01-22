@@ -1,0 +1,12 @@
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: bronze-service-limit
+  namespace: observability-ingress
+spec:
+  rateLimit:
+    local:
+      tokenBucket:
+        maxTokens: 200
+        tokensPerFill: 200
+        fillInterval: 1m

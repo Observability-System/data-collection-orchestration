@@ -1,0 +1,7 @@
+# Example Prometheus queries map
+cpu_usage: 'avg(rate(node_cpu_seconds_total{mode!="idle"}[5m]))'
+memory_usage: 'node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes'
+queue_length: 'avg_over_time(weightedqueue_queue_length_ratio{pod="prio-ingestion-gateway-silver-57558df788-8fngm"}[30s])'
+freshness_total: 'avg by (source) (freshness_good_batches_total)'
+batches_total: 'avg by (source) (freshness_total_batches_total)'
+forwarded_batches_total: 'avg by (source) (weightedqueue_forwarded_batches_total)'

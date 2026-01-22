@@ -1,0 +1,12 @@
+apiVersion: gateway.kgateway.dev/v1alpha1
+kind: TrafficPolicy
+metadata:
+  name: silver-service-limit
+  namespace: observability-ingress
+spec:
+  rateLimit:
+    local:
+      tokenBucket:
+        maxTokens: 300
+        tokensPerFill: 300
+        fillInterval: 1m

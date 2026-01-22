@@ -1,0 +1,26 @@
+apiVersion: observability.x-k8s.io/v1alpha1
+kind: ObservabilityGateway
+metadata:
+  name: prio-ingestion-gateway
+  namespace: observability
+spec:
+  image: ghcr.io/observability-system/otel-prioqueue-collector:latest
+  configConfigMap: otel-collector-config
+  classes:
+    - name: gold
+      replicas: 3
+      resources:
+        requests:
+          cpu: 300m
+          memory: 512Mi
+        limits:
+          cpu: 800m
+          memory: 1Gi
+    - name: silver
+      replicas: 2
+      resources:
+        requests:
+          cpu: 200m
+          memory: 384Mi
+    - name: bronze
+      replicas: 1

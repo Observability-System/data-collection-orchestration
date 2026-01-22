@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: observability-ingress
+
+resources:
+  - gateway.yaml
+  - httproute.yaml
+  - trafficpolicies/gold-service-limit.yaml
+  - trafficpolicies/silver-service-limit.yaml
+  - trafficpolicies/bronze-service-limit.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: observability
+      app.kubernetes.io/component: ingress
+      observability.myorg.io/purpose: otlp
+    includeSelectors: false
